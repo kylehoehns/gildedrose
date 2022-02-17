@@ -120,6 +120,15 @@ class EndToEndTests {
   }
 
   @Test
+  void givenABasicItemInTheStoreThatHasExpired_whenUpdatingItems_thenQualityShouldDegradeTwiceAsFast() throws Exception {
+    addItem("Sword", 20, 0);
+
+    updateStore();
+
+    verifyItemValues("Sword", 18, -1);
+  }
+
+  @Test
   void givenAnItem_whenRetrievingTheItem_thenShouldReturnTheItem() throws Exception {
     var item = addItem("Sword", 10, 5);
 
