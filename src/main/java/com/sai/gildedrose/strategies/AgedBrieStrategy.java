@@ -4,7 +4,7 @@ import com.sai.gildedrose.PersistedItem;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AgedBrieStrategy extends AbstractItemStrategy implements SpecificItemStrategy {
+public class AgedBrieStrategy extends BasicItemStrategy implements SpecificItemStrategy {
 
   @Override
   public boolean handles(PersistedItem item) {

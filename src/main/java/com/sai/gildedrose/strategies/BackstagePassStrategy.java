@@ -4,7 +4,7 @@ import com.sai.gildedrose.PersistedItem;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BackstagePassStrategy extends AbstractItemStrategy implements SpecificItemStrategy {
+public class BackstagePassStrategy extends BasicItemStrategy implements SpecificItemStrategy {
   @Override
   public boolean handles(PersistedItem item) {
     return "Backstage Pass".equalsIgnoreCase(item.getName());

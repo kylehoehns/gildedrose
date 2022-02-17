@@ -13,13 +13,13 @@ public class PersistedItem {
   @Id
   private UUID id;
 
-  @Column(name="name", nullable = false)
+  @Column(name = "name", nullable = false)
   private String name;
 
-  @Column(name="quality", nullable = false)
+  @Column(name = "quality", nullable = false)
   private int quality;
 
-  @Column(name="sell_in", nullable = false)
+  @Column(name = "sell_in", nullable = false)
   private int sellIn;
 
   public UUID getId() {

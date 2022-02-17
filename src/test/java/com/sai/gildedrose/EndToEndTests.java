@@ -1,5 +1,6 @@
 package com.sai.gildedrose;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.transaction.Transactional;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -25,6 +27,9 @@ class EndToEndTests {
 
   @Autowired
   private MockMvc mockMvc;
+
+  @Autowired
+  private ObjectMapper objectMapper;
 
   @Test
   void givenNoItemsInTheStore_whenRetrievingItems_thenReturnsNoItems() throws Exception {
@@ -114,6 +119,27 @@ class EndToEndTests {
     verifyItemValues("Backstage Pass", 0, -1);
   }
 
+  @Test
+  void givenAnItem_whenRetrievingTheItem_thenShouldReturnTheItem() throws Exception {
+    var item = addItem("Sword", 10, 5);
+
+    mockMvc.perform(get("/store/items/" + item.id())
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.name").value("Sword"))
+        .andExpect(jsonPath("$.quality").value(10))
+        .andExpect(jsonPath("$.sellIn").value(5));
+  }
+
+  @Test
+  void givenNoItems_whenRetrievingAnItem_thenShouldReturnNoItem() throws Exception {
+
+    mockMvc.perform(get("/store/items/" + UUID.randomUUID())
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
+  }
+
   private void verifyItemValues(String name, int quality, int sellIn) throws Exception {
     mockMvc.perform(get("/store/items")
             .contentType(MediaType.APPLICATION_JSON))
@@ -129,20 +155,23 @@ class EndToEndTests {
     mockMvc.perform(post("/store/update")).andExpect(status().isNoContent());
   }
 
-  private void addItem(String name, int quality, int sellIn) throws Exception {
-    mockMvc.perform(post("/store/items")
+  private Item addItem(String name, int quality, int sellIn) throws Exception {
+    var result = mockMvc.perform(post("/store/items")
             .content(asJsonString(new Item(null, name, quality, sellIn)))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isCreated())
-        .andExpect(jsonPath("$.name").value(name));
+        .andExpect(jsonPath("$.name").value(name))
+        .andReturn();
+
+    return asItem(result.getResponse().getContentAsString());
   }
 
-  private static String asJsonString(final Object obj) {
-    try {
-      return new ObjectMapper().writeValueAsString(obj);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+  private Item asItem(String response) throws JsonProcessingException {
+    return objectMapper.readValue(response, Item.class);
+  }
+
+  private String asJsonString(Object obj) throws JsonProcessingException {
+    return objectMapper.writeValueAsString(obj);
   }
 
 }
