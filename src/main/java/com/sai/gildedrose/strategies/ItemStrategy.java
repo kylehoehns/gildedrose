@@ -4,7 +4,9 @@ import com.sai.gildedrose.PersistedItem;
 
 public interface ItemStrategy {
 
-  boolean handles(PersistedItem item);
+  default boolean handles(PersistedItem item) {
+    return false;
+  }
 
   PersistedItem handle(PersistedItem item);
 }

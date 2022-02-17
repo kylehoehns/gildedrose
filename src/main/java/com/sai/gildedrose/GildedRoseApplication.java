@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class GildedRoseApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(GildedRoseApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(GildedRoseApplication.class, args);
+  }
 
 }
