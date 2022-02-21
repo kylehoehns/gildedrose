@@ -12,8 +12,7 @@ public class AgedBrieStrategy extends BasicItemStrategy implements SpecificItemS
   }
 
   @Override
-  protected PersistedItem handleQuality(PersistedItem item) {
+  protected void handleQuality(PersistedItem item) {
     item.setQuality(item.getQuality() + 1);
-    return item;
   }
 }
