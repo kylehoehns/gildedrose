@@ -4,6 +4,7 @@ import com.sai.gildedrose.strategies.BasicItemStrategy;
 import com.sai.gildedrose.strategies.ItemStrategy;
 import com.sai.gildedrose.strategies.SpecificItemStrategy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,21 +28,25 @@ public class StoreService {
     this.basicItemStrategy = basicItemStrategy;
   }
 
+  @Transactional(readOnly = true)
   public List<Item> getItems() {
     return itemRepository.findAll().stream()
         .map(itemFactory::fromPersisted)
         .toList();
   }
 
+  @Transactional
   public Item addItem(Item item) {
     var persisted = itemRepository.save(itemFactory.toPersisted(item));
     return itemFactory.fromPersisted(persisted);
   }
 
+  @Transactional(readOnly = true)
   public Optional<Item> getItem(UUID id) {
     return itemRepository.findById(id).map(itemFactory::fromPersisted);
   }
 
+  @Transactional
   public void updateStoreItems() {
     var items = itemRepository.findAll().stream().map(item -> getStrategy(item).handle(item)).toList();
     itemRepository.saveAll(items);
