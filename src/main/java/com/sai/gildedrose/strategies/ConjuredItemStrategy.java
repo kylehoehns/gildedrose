@@ -12,7 +12,7 @@ public class ConjuredItemStrategy extends BasicItemStrategy implements SpecificI
   }
 
   @Override
-  protected PersistedItem handleQuality(PersistedItem item) {
-    return setQuality(item, item.getQuality() - 2);
+  protected void handleQuality(PersistedItem item) {
+    setQuality(item, item.getQuality() - 2);
   }
 }

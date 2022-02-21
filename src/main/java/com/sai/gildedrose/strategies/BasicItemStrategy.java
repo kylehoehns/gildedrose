@@ -16,21 +16,19 @@ public class BasicItemStrategy implements ItemStrategy {
     return item;
   }
 
-  protected PersistedItem handleSellIn(PersistedItem item) {
+  protected void handleSellIn(PersistedItem item) {
     item.setSellIn(item.getSellIn() - 1);
-    return item;
   }
 
-  protected PersistedItem handleQuality(PersistedItem item) {
+  protected void handleQuality(PersistedItem item) {
     var updatedQuality = item.getQuality() - 1;
     if (item.getSellIn() < 0) {
       updatedQuality = item.getQuality() - 2;
     }
-    return setQuality(item, updatedQuality);
+    setQuality(item, updatedQuality);
   }
 
-  final PersistedItem setQuality(PersistedItem item, int quality) {
+  final void setQuality(PersistedItem item, int quality) {
     item.setQuality(Math.max(MIN_QUALITY, Math.min(quality, MAX_QUALITY)));
-    return item;
   }
 }

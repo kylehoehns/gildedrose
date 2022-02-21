@@ -11,7 +11,7 @@ public class BackstagePassStrategy extends BasicItemStrategy implements Specific
   }
 
   @Override
-  protected PersistedItem handleQuality(PersistedItem item) {
+  protected void handleQuality(PersistedItem item) {
     int updatedQuality;
     int daysUntilConcert = item.getSellIn();
     if (daysUntilConcert > 10) {
@@ -23,6 +23,6 @@ public class BackstagePassStrategy extends BasicItemStrategy implements Specific
     } else {
       updatedQuality = 0;
     }
-    return setQuality(item, updatedQuality);
+    setQuality(item, updatedQuality);
   }
 }
