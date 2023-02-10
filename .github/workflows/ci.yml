@@ -17,7 +17,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '19'
-          cache: 'maven'
+          cache: 'gradle'
 
-      - name: Build with Maven
-        run: ./mvnw package
+      - name: Build with Gradle
+        run: ./gradlew build
